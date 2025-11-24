@@ -1,0 +1,117 @@
+.weather-table {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+}
+
+.table-row {
+    display: flex;
+    min-width: fit-content;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.table-row:last-child {
+    border-bottom: none;
+}
+
+.header-row {
+    background: var(--color-primary);
+    color: white;
+    font-weight: 600;
+}
+
+.forecast-row {
+    background: var(--color-background);
+    font-weight: 500;
+}
+
+.history-row {
+    background: var(--color-surface);
+}
+
+.history-row:hover {
+    background: #f1f5f9;
+}
+
+.table-cell {
+    flex: 0 0 100px;
+    padding: var(--spacing-md);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+    border-right: 1px solid var(--color-border);
+    transition: background-color 0.2s ease;
+}
+
+.table-cell:last-child {
+    border-right: none;
+}
+
+.sticky-cell {
+    position: sticky;
+    left: 0;
+    z-index: 10;
+    background: inherit;
+    font-weight: 600;
+    flex: 0 0 120px;
+    box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
+}
+
+.header-row .sticky-cell {
+    background: var(--color-primary);
+}
+
+.forecast-row .sticky-cell {
+    background: var(--color-background);
+}
+
+.history-row .sticky-cell {
+    background: var(--color-surface);
+}
+
+.date-label {
+    font-size: var(--font-size-sm);
+}
+
+.weather-icon {
+    font-size: 1.5rem;
+}
+
+.temp-high {
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.temp-low {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .table-cell {
+        flex: 0 0 80px;
+        padding: var(--spacing-sm);
+    }
+
+    .sticky-cell {
+        flex: 0 0 80px;
+    }
+
+    .weather-icon {
+        font-size: 1.2rem;
+    }
+
+    .temp-high,
+    .temp-low {
+        font-size: var(--font-size-sm);
+    }
+}

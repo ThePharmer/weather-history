@@ -39,6 +39,10 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 4. **Stop and report**: Command ends after Phase 2 planning. Report branch, IMPL_PLAN path, and generated artifacts.
 
+5. **Sync to Native Artifacts**:
+   - Copy the content of the generated `plan.md` to the agent's native `implementation_plan.md` artifact.
+   - Ensure the summary and structure are preserved.
+
 ## Phases
 
 ### Phase 0: Outline & Research

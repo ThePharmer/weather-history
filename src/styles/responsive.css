@@ -1,0 +1,36 @@
+@media (max-width: 768px) {
+    body {
+        padding: var(--spacing-sm);
+    }
+
+    .weather-table {
+        font-size: var(--font-size-sm);
+    }
+
+    .location-search {
+        flex-direction: column;
+    }
+
+    .search-wrapper {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+
+    .search-wrapper input,
+    .search-wrapper button {
+        width: 100%;
+    }
+}
+
+/* Horizontal scroll indicator for mobile */
+@media (max-width: 768px) {
+    .weather-table::after {
+        content: '← Scroll →';
+        display: block;
+        text-align: center;
+        padding: var(--spacing-sm);
+        color: var(--color-text-muted);
+        font-size: var(--font-size-sm);
+        background: var(--color-surface);
+    }
+}
