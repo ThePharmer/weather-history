@@ -5,6 +5,8 @@
 
 import { getWeatherIcon, applyTemperatureColor } from '../utils/style-utils.js';
 import { calculateAverage } from '../utils/transform.js';
+import { getState } from '../state.js';
+import { fahrenheitToCelsius, formatTemperature } from '../utils/units.js';
 
 /**
  * Create and render the weather table
@@ -14,6 +16,7 @@ import { calculateAverage } from '../utils/transform.js';
  */
 export function createWeatherTable(container, data) {
     const { forecast, history } = data;
+    const { unit } = getState();
 
     const table = document.createElement('div');
     table.className = 'weather-table';
@@ -23,12 +26,12 @@ export function createWeatherTable(container, data) {
     table.appendChild(headerRow);
 
     // Create forecast row
-    const forecastRow = createForecastRow(forecast);
+    const forecastRow = createForecastRow(forecast, unit);
     table.appendChild(forecastRow);
 
     // Create historical rows
     history.forEach((yearData) => {
-        const historyRow = createHistoryRow(yearData, forecast);
+        const historyRow = createHistoryRow(yearData, forecast, unit);
         table.appendChild(historyRow);
     });
 
@@ -36,6 +39,16 @@ export function createWeatherTable(container, data) {
     container.appendChild(table);
 
     return table;
+}
+
+/**
+ * Helper to get display temperature based on unit
+ */
+function getDisplayTemp(tempF, unit) {
+    if (unit === 'C') {
+        return formatTemperature(fahrenheitToCelsius(tempF), 'C');
+    }
+    return formatTemperature(tempF, 'F');
 }
 
 /**
@@ -76,9 +89,10 @@ function createHeaderRow(forecast) {
 /**
  * Create forecast row
  * @param {Array} forecast - Forecast data
+ * @param {string} unit - Current unit ('F' or 'C')
  * @returns {HTMLElement} Forecast row element
  */
-function createForecastRow(forecast) {
+function createForecastRow(forecast, unit) {
     const row = document.createElement('div');
     row.className = 'table-row forecast-row';
 
@@ -94,8 +108,8 @@ function createForecastRow(forecast) {
         cell.className = 'table-cell';
         cell.innerHTML = `
       <div class="weather-icon">${getWeatherIcon(day.weatherCode)}</div>
-      <div class="temp-high">${Math.round(day.maxTemp)}°</div>
-      <div class="temp-low">${Math.round(day.minTemp)}°</div>
+      <div class="temp-high">${getDisplayTemp(day.maxTemp, unit)}</div>
+      <div class="temp-low">${getDisplayTemp(day.minTemp, unit)}</div>
     `;
         row.appendChild(cell);
     });
@@ -106,8 +120,8 @@ function createForecastRow(forecast) {
     const avgCell = document.createElement('div');
     avgCell.className = 'table-cell';
     avgCell.innerHTML = `
-    <div class="temp-high">${Math.round(avgMax)}°</div>
-    <div class="temp-low">${Math.round(avgMin)}°</div>
+    <div class="temp-high">${getDisplayTemp(avgMax, unit)}</div>
+    <div class="temp-low">${getDisplayTemp(avgMin, unit)}</div>
   `;
     row.appendChild(avgCell);
 
@@ -118,9 +132,10 @@ function createForecastRow(forecast) {
  * Create historical year row
  * @param {Object} yearData - Historical data for one year
  * @param {Array} forecast - Forecast data (for color comparison)
+ * @param {string} unit - Current unit ('F' or 'C')
  * @returns {HTMLElement} History row element
  */
-function createHistoryRow(yearData, forecast) {
+function createHistoryRow(yearData, forecast, unit) {
     const row = document.createElement('div');
     row.className = 'table-row history-row';
 
@@ -136,13 +151,14 @@ function createHistoryRow(yearData, forecast) {
         cell.className = 'table-cell';
 
         // Apply color coding based on forecast comparison
+        // Note: Color coding logic should still work with raw F values since it's relative
         if (forecast[index]) {
             applyTemperatureColor(cell, day.maxTemp, forecast[index].maxTemp);
         }
 
         cell.innerHTML = `
-      <div class="temp-high">${Math.round(day.maxTemp)}°</div>
-      <div class="temp-low">${Math.round(day.minTemp)}°</div>
+      <div class="temp-high">${getDisplayTemp(day.maxTemp, unit)}</div>
+      <div class="temp-low">${getDisplayTemp(day.minTemp, unit)}</div>
     `;
         row.appendChild(cell);
     });
@@ -151,8 +167,8 @@ function createHistoryRow(yearData, forecast) {
     const avgCell = document.createElement('div');
     avgCell.className = 'table-cell';
     avgCell.innerHTML = `
-    <div class="temp-high">${Math.round(yearData.avgMax)}°</div>
-    <div class="temp-low">${Math.round(yearData.avgMin)}°</div>
+    <div class="temp-high">${getDisplayTemp(yearData.avgMax, unit)}</div>
+    <div class="temp-low">${getDisplayTemp(yearData.avgMin, unit)}</div>
   `;
     row.appendChild(avgCell);
 

@@ -60,6 +60,7 @@ export async function getForecast(latitude, longitude, days = 10) {
         daily: 'temperature_2m_max,temperature_2m_min,weathercode',
         timezone: 'auto',
         forecast_days: days,
+        temperature_unit: 'fahrenheit',
     });
 
     return await apiClient.get(url);
@@ -81,7 +82,33 @@ export async function getHistoricalWeather(latitude, longitude, startDate, endDa
         end_date: endDate,
         daily: 'temperature_2m_max,temperature_2m_min,weathercode,snowfall_sum',
         timezone: 'auto',
+        temperature_unit: 'fahrenheit',
     });
 
+    console.log('Fetching historical weather URL:', url);
     return await apiClient.get(url);
+}
+
+/**
+ * Fetch 30 years of historical weather data for records analysis
+ * @param {number} latitude - Latitude
+ * @param {number} longitude - Longitude
+ * @returns {Promise<Object>} Historical weather data
+ */
+export async function get30YearHistory(latitude, longitude) {
+    const endDate = new Date();
+    endDate.setDate(endDate.getDate() - 1); // Yesterday
+
+    const startDate = new Date();
+    startDate.setFullYear(startDate.getFullYear() - 30);
+
+    // Format dates as YYYY-MM-DD
+    const formatDate = (date) => date.toISOString().split('T')[0];
+
+    return await getHistoricalWeather(
+        latitude,
+        longitude,
+        formatDate(startDate),
+        formatDate(endDate)
+    );
 }

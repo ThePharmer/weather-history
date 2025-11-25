@@ -12,7 +12,7 @@ Fetches the 10-day forecast for the given coordinates.
     - `lat` (number): Latitude
     - `lon` (number): Longitude
 - **Output**: `Promise<DailyWeather[]>`
-    - Returns an array of 10 `DailyWeather` objects.
+    - Returns an array of 10 `DailyWeather` objects (Temperatures in Fahrenheit).
 
 ### `getHistory(lat, lon, startDate, endDate)`
 

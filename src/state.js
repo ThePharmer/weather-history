@@ -9,6 +9,7 @@ const state = {
     extremeWeatherData: null,
     loading: false,
     error: null,
+    unit: 'F', // 'F' or 'C'
 };
 
 const listeners = new Set();
@@ -57,5 +58,6 @@ export function resetState() {
     state.extremeWeatherData = null;
     state.loading = false;
     state.error = null;
+    state.unit = 'F';
     notifyListeners();
 }

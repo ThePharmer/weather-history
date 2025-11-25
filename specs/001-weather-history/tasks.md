@@ -47,17 +47,21 @@
 
 *Goal: Contextualize current weather with 30-year records.*
 
-- [ ] T026 [US2] Create unit tests for Record Calculation Logic `tests/unit/utils/analysis.test.js`
-- [ ] T027 [US2] Implement 30-year Historical Data Fetch `src/api/weather-api.js`
-- [ ] T028 [US2] Implement Record Calculation Logic (Warmest/Coldest Week, Snowfall) `src/utils/analysis.js`
-- [ ] T029 [US2] Create Analysis Panel Component `src/components/analysis-panel.js`
-- [ ] T030 [US2] Render Records in UI `src/components/analysis-panel.js`
+- [x] T026 [US2] Create unit tests for Record Calculation Logic `tests/unit/utils/analysis.test.js`
+- [x] T027 [US2] Implement 30-year Historical Data Fetch `src/api/weather-api.js`
+- [x] T028 [US2] Implement Record Calculation Logic (Warmest/Coldest Week, Snowfall) `src/utils/analysis.js`
+- [x] T029 [US2] Create Analysis Panel Component `src/components/analysis-panel.js`
+- [x] T030 [US2] Render Records in UI `src/components/analysis-panel.js`
 
 ## Phase 5: Polish & Cross-Cutting
 
 - [x] T031 [Polish] Implement Responsive Mobile Layout (Horizontal Scroll) `src/styles/responsive.css`
 - [x] T032 [Polish] Add Loading States and Error Messages `src/components/ui-status.js`
 - [x] T033 [Polish] specific edge case handling (Leap years visual check) `src/components/weather-table.js`
+- [x] T034 [Polish] Verify Analysis Panel responsiveness (Mobile/Desktop) `src/styles/responsive.css`
+- [x] T035 [Verification] Run Lighthouse and Performance tests (SC-001, SC-004) `tests/audit`
+- [x] T036 [Feature] Implement Unit Toggle State and Conversion Logic `src/utils/units.js`
+- [x] T037 [Feature] Update API to fetch Fahrenheit and UI to support toggle `src/api/weather-api.js`
 
 ## Dependencies
 

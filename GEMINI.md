@@ -3,6 +3,7 @@
 Auto-generated from all feature plans. Last updated: 2025-11-24
 
 ## Active Technologies
+- `localStorage` (for caching last location and unit preference) (001-weather-history)
 
 - JavaScript (ES6+), HTML5, CSS3 (Vanilla) (001-weather-history)
 
@@ -23,6 +24,7 @@ npm test; npm run lint
 JavaScript (ES6+), HTML5, CSS3 (Vanilla): Follow standard conventions
 
 ## Recent Changes
+- 001-weather-history: Added JavaScript (ES6+), HTML5, CSS3 (Vanilla)
 
 - 001-weather-history: Added JavaScript (ES6+), HTML5, CSS3 (Vanilla)
 

@@ -79,6 +79,7 @@ As a user, I want to auto-detect my location or search for a city so I can get r
     - **Warmer**: Red/Orange background.
     - **Colder**: Blue background.
 - **FR-007**: System MUST display an "Average" column on the right of the table, showing the average temperature for that row's 10-day period (to show overall trends for that year).
+- **FR-013**: System MUST fetch data in Fahrenheit by default and provide a toggle to switch to Celsius (client-side conversion).
 - **FR-008**: System MUST fetch 30 years of historical data to calculate records.
 - **FR-009**: System MUST calculate and display "Warmest week on record" (highest avg temp for a 7-day rolling window) from the past 30 years.
 - **FR-010**: System MUST calculate and display "Coldest week on record" (lowest avg temp for a 7-day rolling window) from the past 30 years.

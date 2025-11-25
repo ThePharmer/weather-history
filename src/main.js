@@ -5,14 +5,18 @@
 import './styles/variables.css';
 import './styles/table.css';
 import './styles/responsive.css';
+import './styles/analysis.css';
+import './styles/header.css';
 import './style.css';
 
 import { createLocationSearch } from './components/location-search.js';
 import { createWeatherTable } from './components/weather-table.js';
+import { createAnalysisPanel } from './components/analysis-panel.js';
 import { showLoading, showError } from './components/ui-status.js';
 import { getCurrentPosition } from './utils/geo.js';
-import { getForecast, getHistoricalWeather, reverseGeocode } from './api/weather-api.js';
+import { getForecast, getHistoricalWeather, reverseGeocode, get30YearHistory } from './api/weather-api.js';
 import { mergeForecastsWithHistory, fetchMultiYearHistory } from './utils/transform.js';
+import { calculateWarmestWeek, calculateColdestWeek, calculateSnowfallRecords } from './utils/analysis.js';
 import { formatDate, getDateRange } from './utils/date-utils.js';
 import { setState, getState, subscribe } from './state.js';
 
@@ -20,19 +24,54 @@ import { setState, getState, subscribe } from './state.js';
 document.querySelector('#app').innerHTML = `
   <div class="app-container">
     <header class="app-header">
-      <h1>🌤️ Weather History & Analysis</h1>
-      <p class="subtitle">Compare 10-day forecasts with 5 years of historical data</p>
+      <div class="header-content">
+        <div>
+          <h1>🌤️ Weather History & Analysis</h1>
+          <p class="subtitle">Compare 10-day forecasts with 5 years of historical data</p>
+        </div>
+        <button id="unit-toggle" class="unit-toggle" aria-label="Toggle Unit">
+          Switch to °C
+        </button>
+      </div>
     </header>
     
     <div id="location-container"></div>
     <div id="status-container"></div>
     <div id="table-container"></div>
+    <div id="analysis-container"></div>
   </div>
 `;
 
 const locationContainer = document.querySelector('#location-container');
 const statusContainer = document.querySelector('#status-container');
 const tableContainer = document.querySelector('#table-container');
+const analysisContainer = document.querySelector('#analysis-container');
+const unitToggle = document.querySelector('#unit-toggle');
+
+// Handle unit toggle
+unitToggle.addEventListener('click', () => {
+  const { unit } = getState();
+  const newUnit = unit === 'F' ? 'C' : 'F';
+  setState({ unit: newUnit });
+});
+
+// Subscribe to state changes to update UI
+subscribe((state) => {
+  // Update toggle button text
+  unitToggle.textContent = state.unit === 'F' ? 'Switch to °C' : 'Switch to °F';
+
+  // Re-render table if data exists
+  if (state.forecastData && state.historicalData) {
+    const mergedData = mergeForecastsWithHistory(state.forecastData, state.historicalData);
+    createWeatherTable(tableContainer, mergedData);
+  }
+
+  // Re-render analysis if data exists
+  if (state.records) {
+    analysisContainer.innerHTML = '';
+    analysisContainer.appendChild(createAnalysisPanel(state.records));
+  }
+});
 
 // Create location search component
 createLocationSearch(locationContainer);
@@ -103,12 +142,46 @@ async function fetchWeatherData(latitude, longitude) {
     statusContainer.innerHTML = '';
     createWeatherTable(tableContainer, mergedData);
 
-    setState({
-      forecastData: forecast,
-      historicalData,
-      loading: false,
-      error: null,
-    });
+    // Fetch and render analysis (non-blocking for table)
+    analysisContainer.innerHTML = '<p class="loading-text">Loading 30-year analysis...</p>';
+
+    try {
+      const history30Year = await get30YearHistory(latitude, longitude);
+      const dailyData = history30Year.daily ? history30Year.daily.time.map((t, i) => ({
+        date: t,
+        maxTemp: history30Year.daily.temperature_2m_max[i],
+        minTemp: history30Year.daily.temperature_2m_min[i],
+        weatherCode: history30Year.daily.weathercode[i]
+      })) : [];
+
+      const records = {
+        warmestWeek: calculateWarmestWeek(dailyData),
+        coldestWeek: calculateColdestWeek(dailyData),
+        snowfall: calculateSnowfallRecords(dailyData)
+      };
+
+      analysisContainer.innerHTML = '';
+      analysisContainer.appendChild(createAnalysisPanel(records));
+
+      setState({
+        forecastData: forecast,
+        historicalData,
+        records,
+        loading: false,
+        error: null,
+      });
+    } catch (analysisError) {
+      console.error('Analysis fetch failed:', analysisError);
+      console.error('Analysis error details:', analysisError.message, analysisError.stack);
+      analysisContainer.innerHTML = `<p class="error-text">Failed to load analysis data: ${analysisError.message}</p>`;
+      // Still update state with main data
+      setState({
+        forecastData: forecast,
+        historicalData,
+        loading: false,
+        error: null,
+      });
+    }
   } catch (error) {
     console.error('Error fetching weather data:', error);
     showError(

@@ -4,6 +4,12 @@ import { getForecast, getHistoricalWeather } from '../../../src/api/weather-api.
 describe('Weather API', () => {
     beforeEach(() => {
         global.fetch = vi.fn();
+        // Mock window.location.origin for buildUrl
+        global.window = {
+            location: {
+                origin: 'http://localhost:3000'
+            }
+        };
     });
 
     describe('getForecast', () => {
@@ -24,8 +30,14 @@ describe('Weather API', () => {
 
             const result = await getForecast(51.5074, -0.1278, 10);
             expect(result).toEqual(mockData);
+
+            // Check for the proxy path, not the upstream URL
             expect(global.fetch).toHaveBeenCalledWith(
-                expect.stringContaining('api.open-meteo.com/v1/forecast'),
+                expect.stringContaining('/api/forecast/v1/forecast'),
+                expect.any(Object)
+            );
+            expect(global.fetch).toHaveBeenCalledWith(
+                expect.stringContaining('temperature_unit=fahrenheit'),
                 expect.any(Object)
             );
         });
@@ -49,8 +61,14 @@ describe('Weather API', () => {
 
             const result = await getHistoricalWeather(51.5074, -0.1278, '2023-11-24', '2023-11-25');
             expect(result).toEqual(mockData);
+
+            // Check for the proxy path
             expect(global.fetch).toHaveBeenCalledWith(
-                expect.stringContaining('api.open-meteo.com/v1/archive'),
+                expect.stringContaining('/api/archive/v1/archive'),
+                expect.any(Object)
+            );
+            expect(global.fetch).toHaveBeenCalledWith(
+                expect.stringContaining('temperature_unit=fahrenheit'),
                 expect.any(Object)
             );
         });

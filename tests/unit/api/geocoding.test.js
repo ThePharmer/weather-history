@@ -4,6 +4,12 @@ import { searchLocation, reverseGeocode } from '../../../src/api/weather-api.js'
 describe('Geocoding API', () => {
     beforeEach(() => {
         global.fetch = vi.fn();
+        // Mock window.location.origin for buildUrl
+        global.window = {
+            location: {
+                origin: 'http://localhost:3000'
+            }
+        };
     });
 
     describe('searchLocation', () => {
@@ -29,7 +35,7 @@ describe('Geocoding API', () => {
             const result = await searchLocation('London');
             expect(result).toEqual(mockData.results);
             expect(global.fetch).toHaveBeenCalledWith(
-                expect.stringContaining('geocoding-api.open-meteo.com'),
+                expect.stringContaining('/api/geocoding/v1/search'),
                 expect.objectContaining({
                     method: 'GET',
                 })

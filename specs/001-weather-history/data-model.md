@@ -57,6 +57,7 @@ const state = {
   error: null,
   forecastData: [], // Array of DailyWeather
   historicalData: {}, // Map of year -> DailyWeather[]
-  records: [] // Array of WeatherRecord
+  records: [], // Array of WeatherRecord
+  unit: 'F' // 'F' or 'C'
 };
 ```
