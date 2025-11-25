@@ -64,6 +64,11 @@ You **MUST** consider the user input before proceeding (if not empty).
    - Suggested MVP scope (typically just User Story 1)
    - Format validation: Confirm ALL tasks follow the checklist format (checkbox, ID, labels, file paths)
 
+6. **Sync to Native Artifacts**:
+   - Parse the generated `tasks.md` content.
+   - Overwrite the agent's native `task.md` artifact with these tasks.
+   - Ensure the format matches the agent's native task format (using `[ ]`, `[/]`, `[x]`).
+
 Context for task generation: {{args}}
 
 The tasks.md should be immediately executable - each task must be specific enough that an LLM can complete it without additional context.

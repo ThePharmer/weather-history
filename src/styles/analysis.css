@@ -1,0 +1,85 @@
+.analysis-panel {
+    margin-top: 2rem;
+    padding: 1rem;
+    background: var(--bg-card);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.analysis-panel h2 {
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+    text-align: center;
+}
+
+.records-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.record-card {
+    padding: 1.5rem;
+    border-radius: 8px;
+    background: var(--bg-secondary);
+    text-align: center;
+    border: 1px solid var(--border-color);
+}
+
+.record-card h3 {
+    margin-top: 0;
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+}
+
+.record-value {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin: 0.5rem 0;
+}
+
+.record-date {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.record-year {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+}
+
+.record-card.warm .record-value {
+    color: var(--color-hot);
+}
+
+.record-card.cold .record-value {
+    color: var(--color-cold);
+}
+
+.snow-stats {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.snow-stat {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+}
+
+.snow-stat .label {
+    color: var(--text-secondary);
+}
+
+.snow-stat .value {
+    font-weight: 500;
+}
+
+@media (max-width: 600px) {
+    .records-grid {
+        grid-template-columns: 1fr;
+    }
+}
